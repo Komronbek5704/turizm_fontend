@@ -1,18 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const { authMiddleware, adminMiddleware } = require('../middleware/auth');
+
+// Middleware'larni chaqirish
 const { 
   uploadSingle, 
   uploadMultiple, 
-  uploadTourImage, 
+  uploadTourImage: uploadTourMiddleware, // Nomini o'zgartirdik
   handleUploadError 
 } = require('../middleware/upload');
-let {
+
+// Controller'larni chaqirish
+const {
   uploadSingleImage,
   uploadMultipleImages,
   deleteUploadedImages,
   getUploadedImages,
-  uploadTourImage
+  uploadTourImage: uploadTourController // Nomini o'zgartirdik
 } = require('../controllers/uploadController');
 
 // Single rasm yuklash (admin only)
@@ -34,12 +38,13 @@ router.post('/multiple',
 );
 
 // Tour uchun rasm yuklash (admin only)
+// Bu yerda yangi nomlangan o'zgaruvchilarni ishlatamiz
 router.post('/tour-image', 
   authMiddleware, 
   adminMiddleware, 
-  uploadTourImage, 
+  uploadTourMiddleware, // Middleware qismi
   handleUploadError, 
-  uploadTourImage
+  uploadTourController // Controller qismi
 );
 
 // Rasmni o'chirish (admin only)
