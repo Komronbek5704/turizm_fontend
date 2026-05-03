@@ -26,7 +26,7 @@ app.use(
         "script-src": ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
         "style-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
         "img-src": ["'self'", "data:", "https://res.cloudinary.com", "https://*.openstreetmap.org"],
-        "connect-src": ["'self'", "https://*.railway.app", "https://res.cloudinary.com"],
+        "connect-src": ["'self'", "https://*.railway.app", "https://res.cloudinary.com", "https://cdn.jsdelivr.net"],
         "font-src": ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
       },
     },
