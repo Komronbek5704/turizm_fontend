@@ -16,6 +16,9 @@ const paymentRoutes = require('./routes/payment');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust Railway's reverse proxy so express-rate-limit can read X-Forwarded-For
+app.set('trust proxy', 1);
+
 // --- SECURITY CONFIGURATION (HELMET) ---
 // Tashqi kutubxonalar (Bootstrap, jsPDF, Cloudinary) ishlashi uchun CSP sozlamalari
 app.use(
