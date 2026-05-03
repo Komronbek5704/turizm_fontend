@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TourVoyage - Admin Dashboard</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="./css/admin-dashboard.css">
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p class="mt-3">Admin panel yuklanmoqda...</p>
+    </div>
+
+    <!-- Wrapper -->
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <nav class="dashboard-sidebar" id="sidebar">
+            <!-- Logo -->
+            <div class="sidebar-header">
+                <a href="index.html" class="logo-link">
+                    <i class="fas fa-plane"></i>
+                    <h3>TourVoyage</h3>
+                </a>
+                <p class="text-muted">Admin Panel</p>
+            </div>
+
+            <!-- User info -->
+            <div class="user-info">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs9JU9w353X3ozGwESRFXFIHZaVvrAm2eAjg&s" class="user-avatar" alt="Admin">
+                <div class="user-details">
+                    <h6 id="adminUsername">Administrator</h6>
+                    <p class="text-muted" id="adminEmail">admin@tourvoyage.com</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#messages" class="nav-link" data-section="messages">
+                        <i class="fas fa-envelope"></i>
+                        <span>Xabarlar</span>
+                        <span class="nav-badge" id="unreadMessagesCount">0</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#notifications" class="nav-link" data-section="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>Bildirishnomalar</span>
+                        <span class="nav-badge" id="unreadNotificationsCount">0</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#chat" class="nav-link" data-section="chat">
+                        <i class="fas fa-comments"></i>
+                        <span>Chatlar</span>
+                        <span class="nav-badge" id="unreadChatsCount">0</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#bookings" class="nav-link" data-section="bookings">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Bron qilishlar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tours" class="nav-link" data-section="tours">
+                        <i class="fas fa-suitcase"></i>
+                        <span>Tur paketlar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#add-tour" class="nav-link" data-section="add-tour">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Tur qo'shish</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#users" class="nav-link" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>Foydalanuvchilar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reports" class="nav-link" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Hisobotlar</span>
+                    </a>
+                </li>
+                <li class="nav-divider"></li>
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Bosh sahifa</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="logoutAdmin" class="nav-link text-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Chiqish</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <main class="dashboard-content">
+            <!-- Top bar -->
+            <div class="dashboard-topbar">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="topbar-right">
+                    <div class="admin-notification-bell" id="adminNotificationBell">
+                        <i class="fas fa-bell"></i>
+                        <span class="admin-notification-badge" id="adminNotificationBadge" style="display: none;">0</span>
+                    </div>
+                    
+                    <div class="time-display" id="currentTime">
+                        00:00:00
+                    </div>
+                    
+                    <button class="btn btn-primary" id="refreshDashboard">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard sections -->
+            <div class="dashboard-sections">
+                <!-- Dashboard section -->
+                <section id="dashboard" class="dashboard-section active">
+                    <div class="section-header">
+                        <h3><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h3>
+                        <p>TourVoyage statistik ma'lumotlari</p>
+                    </div>
+
+                    <!-- Stats cards -->
+                    <div class="row stats-row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon bg-primary">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h2 id="totalBookings">0</h2>
+                                    <p>Jami bronlar</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon bg-success">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h2 id="totalMessages">0</h2>
+                                    <p>Yangi xabarlar</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon bg-info">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h2 id="totalUsers">0</h2>
+                                    <p>Foydalanuvchilar</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon bg-warning">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="stats-content">
+                                    <h2 id="totalRevenue">$0</h2>
+                                    <p>Daromad</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Tezkor amallar</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary w-100" onclick="showDashboardSection('messages')">
+                                                <i class="fas fa-envelope me-2"></i>Xabarlarni ko'rish
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-success w-100" onclick="showDashboardSection('add-tour')">
+                                                <i class="fas fa-plus me-2"></i>Tur qo'shish
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-info w-100" onclick="showDashboardSection('notifications')">
+                                                <i class="fas fa-bell me-2"></i>Bildirishnomalar
+                                            </button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-warning w-100" onclick="showDashboardSection('chat')">
+                                                <i class="fas fa-comments me-2"></i>Chatlarni ko'rish
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">So'nggi faoliyat</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="recentActivity">
+                                        <!-- So'nggi faoliyatlar -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Oylik bronlar</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="monthlyBookingsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Tur populyarligi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="tourPopularityChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Messages section -->
+                <section id="messages" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-envelope me-2"></i>Xabarlar</h3>
+                        <p>Foydalanuvchilardan kelgan kontakt xabarlari</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="messagesList">
+                                <!-- Xabarlar JavaScript orqali yuklanadi -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications section -->
+                <section id="notifications" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-bell me-2"></i>Bildirishnomalar</h3>
+                        <p>Tizim bildirishnomalari</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="notificationsList">
+                                <!-- Bildirishnomalar JavaScript orqali yuklanadi -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Chat section -->
+                <section id="chat" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-comments me-2"></i>Chatlar</h3>
+                        <p>Foydalanuvchilar bilan chat suhbatlari</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Chatlar ro'yxati</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="chatSessionsList">
+                                        <!-- Chat sessiyalari -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0" id="chatUserName">Chat suhbati</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chat-messages-container" id="chatMessagesContainer">
+                                        <!-- Chat xabarlari -->
+                                    </div>
+                                    <div class="mt-3" id="chatReplySection" style="display: none;">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="chatReplyInput" placeholder="Javob yozing...">
+                                            <button class="btn btn-primary" type="button" id="sendChatReply">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bookings section -->
+                <section id="bookings" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-calendar-check me-2"></i>Bron qilishlar</h3>
+                        <p>Barcha bron qilishlarni boshqarish</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Foydalanuvchi</th>
+                                            <th>Tur</th>
+                                            <th>Sana</th>
+                                            <th>Narx</th>
+                                            <th>Holati</th>
+                                            <th>Amallar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="allBookings">
+                                        <!-- JavaScript orqali yuklanadi -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tours section -->
+                <section id="tours" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-suitcase me-2"></i>Tur paketlar</h3>
+                        <p>Tur paketlarni boshqarish</p>
+                    </div>
+
+                    <div class="row" id="adminToursList">
+                        <!-- JavaScript orqali yuklanadi -->
+                    </div>
+                </section>
+
+                <!-- Add Tour section -->
+                <section id="add-tour" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-plus-circle me-2"></i>Yangi tur paket qo'shish</h3>
+                        <p>Yangi tur paketni tizimga qo'shing</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="addTourForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="tourName" class="form-label">Tur nomi</label>
+                                            <input type="text" class="form-control" id="tourName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="tourPrice" class="form-label">Narxi ($)</label>
+                                            <input type="number" class="form-control" id="tourPrice" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="tourDuration" class="form-label">Davomiyligi</label>
+                                            <input type="text" class="form-control" id="tourDuration" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="tourImage" class="form-label">Rasm URL</label>
+                                            <input type="url" class="form-control" id="tourImage" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tourDescription" class="form-label">Tavsif</label>
+                                    <textarea class="form-control" id="tourDescription" rows="3" required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Saqlash
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users section -->
+                <section id="users" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-users me-2"></i>Foydalanuvchilar</h3>
+                        <p>Ro'yxatdan o'tgan barcha foydalanuvchilar</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Ism</th>
+                                            <th>Email</th>
+                                            <th>Telefon</th>
+                                            <th>Bronlar</th>
+                                            <th>Ro'yxatdan o'tgan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersList">
+                                        <!-- JavaScript orqali yuklanadi -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports section -->
+                <section id="reports" class="dashboard-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-chart-bar me-2"></i>Hisobotlar</h3>
+                        <p>Oylik va yillik statistik hisobotlar</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Daromad statistikasi</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="revenueChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Statistika</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="stats-summary">
+                                        <div class="stat-item">
+                                            <h6>O'rtacha bron narxi</h6>
+                                            <h4 id="avgBookingPrice">$0</h4>
+                                        </div>
+                                        <div class="stat-item">
+                                            <h6>Eng mashhur tur</h6>
+                                            <h6 id="mostPopularTour">-</h6>
+                                        </div>
+                                        <div class="stat-item">
+                                            <h6>Daromad o'sishi</h6>
+                                            <h4 id="revenueGrowth">0%</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Message Modal -->
+    <div class="modal fade message-modal" id="messageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xabar ma'lumotlari</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="message-details">
+                        <h6>Yuboruvchi:</h6>
+                        <p id="modalSender">-</p>
+                        
+                        <h6>Email:</h6>
+                        <p id="modalEmail">-</p>
+                        
+                        <h6>Xabar vaqti:</h6>
+                        <p id="modalTime">-</p>
+                        
+                        <h6>Xabar matni:</h6>
+                        <p id="modalMessage" style="white-space: pre-wrap;">-</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                    <button type="button" class="btn btn-primary" id="replyToMessage">
+                        <i class="fas fa-reply me-2"></i>Javob berish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- API Integration -->
+    <script src="./js/api.js"></script>
+    <script src="./js/admin-dashboard-new.js"></script>
+</body>
+</html>

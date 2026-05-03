@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TourVoyage - Turizm Agentligi</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link rel="stylesheet" href="./css/main.css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <div class="language-selector">
+        <button class="language-btn" id="languageToggle">
+            <i class="fas fa-globe"></i> <span id="currentLanguage">O'zbekcha</span>
+        </button>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-plane"></i> TourVoyage
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Bosh sahifa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tours">Tur paketlar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#weather">Ob-havo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Biz haqimizda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Aloqa</a>
+                    </li>
+
+                    <!-- Notifications -->
+                    <li class="nav-item">
+                        <a class="nav-link notification-bell" href="#" id="notificationBell">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationCount" style="display: none;">0</span>
+                        </a>
+                    </li>
+
+                    <!-- User Menu -->
+                    <li class="nav-item dropdown" id="userMenuContainer" style="display: none;">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <img src="https://via.placeholder.com/150" class="user-avatar-nav" id="userAvatarNav">
+                            <span id="userNameNav">Foydalanuvchi</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="viewProfile"><i
+                                        class="fas fa-user me-2"></i>Profilim</a></li>
+                            <li><a class="dropdown-item" href="#" id="myBookings"><i
+                                        class="fas fa-suitcase me-2"></i>Mening bronlarim</a></li>
+                            <li><a class="dropdown-item" href="#" id="liveChatBtn"><i
+                                        class="fas fa-comments me-2"></i>Admin bilan suhbat</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i
+                                        class="fas fa-sign-out-alt me-2"></i>Chiqish</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Auth Buttons -->
+                    <li class="nav-item" id="authButtonsContainer">
+                        <div class="d-flex gap-2">
+                            <a class="nav-link" href="#" id="loginBtn">
+                                <i class="fas fa-sign-in-alt me-1"></i>Kirish
+                            </a>
+                            <a class="nav-link" href="#" id="registerBtn">
+                                <i class="fas fa-user-plus me-1"></i>Ro'yxatdan o'tish
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-login.html">
+                            <i class="fas fa-lock me-1"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero section -->
+    <section class="hero-section" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="display-4 fw-bold">Biz bilan dunyoni kashf qiling</h1>
+                <p class="lead">Eng yaxshi tur paketlarimiz bilan unutilmas sayohatlarni bosing</p>
+                <a href="#tours" class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-compass me-2"></i>Tur paketlarini ko'rish
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tur paketlari -->
+    <section class="py-5" id="tours">
+        <div class="container">
+            <h2 class="section-title">Tur Paketlarimiz</h2>
+            <p class="section-subtitle">Dunyoning eng mashhur shaharlariga sayohat qiling</p>
+
+            <div class="row" id="tour-packages">
+                <!-- Tur paketlari JavaScript orqali yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Ob-havo ma'lumotlari -->
+    <section class="py-5 bg-light" id="weather">
+        <div class="container">
+            <h2 class="section-title">Ob-havo ma'lumotlari</h2>
+            <p class="section-subtitle">Dunyoning mashhur sayohat yo'nalishlarida hozirgi ob-havo</p>
+
+            <div class="row" id="weather-info">
+                <!-- JavaScript orqali yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Biz haqimizda -->
+    <section class="py-5 bg-light" id="about">
+        <div class="container">
+            <h2 class="section-title">Biz haqimizda</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="about-content">
+                        <h3>TourVoyage - Ishonchli sayohat hamkoringiz</h3>
+                        <p>2010-yildan beri mijozlarimizga sifatli va qulay sayohat xizmatlarini taqdim etib
+                            kelmoqdamiz. Bizning maqsadimiz - har bir mijozimizga unutilmas sayohat tajribasini
+                            yaratish.</p>
+
+                        <div class="stats mt-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 class="counter">5000+</h4>
+                                    <p>Mamnun mijozlar</p>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="counter">150+</h4>
+                                    <p>Tur yo'nalishlari</p>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="counter">12</h4>
+                                    <p>Yillik tajriba</p>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="counter">98%</h4>
+                                    <p>Mijoz mamnunligi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Biz haqimizda" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Aloqa -->
+    <section class="py-5" id="contact">
+        <div class="container">
+            <h2 class="section-title">Aloqa</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="contact-info">
+                        <h4>Biz bilan bog'laning</h4>
+                        <p><i class="fas fa-map-marker-alt me-2"></i>Samarqand shahri, O'zbekiston</p>
+                        <p><i class="fas fa-phone me-2"></i>+998 50 503 57 04</p>
+                        <p><i class="fas fa-envelope me-2"></i>qudratovkomron2004@gmail.com</p>
+
+                        <div class="working-hours mt-4">
+                            <h5>Ish vaqtimiz:</h5>
+                            <p>Dushanba-Juma: 9:00 - 18:00</p>
+                            <p>Shanba: 10:00 - 16:00</p>
+                            <p>Yakshanba: Dam olish kuni</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form id="contactForm">
+                        <div class="mb-3">
+                            <label for="contactName" class="form-label">Ismingiz</label>
+                            <input type="text" class="form-control" id="contactName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactMessage" class="form-label">Xabar</label>
+                            <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Xabar yuborish</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Button -->
+    <div class="ai-chat-button" id="aiChatButton">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Notifikatsiyalar Modal -->
+    <div class="modal fade" id="notificationsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bildirishnomalar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="notificationsList">
+                        <!-- Notifikatsiyalar bu yerda ko'rinadi -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profil Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <img src="https://via.placeholder.com/150" alt="Profil rasmi" class="profile-avatar"
+                            id="profileAvatar">
+                        <div class="profile-avatar-change" onclick="document.getElementById('avatarInput').click()">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                    <h4 id="profileUserName">Foydalanuvchi ismi</h4>
+                    <p id="profileUserEmail">email@example.com</p>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <i class="fas fa-suitcase"></i>
+                                <h3 id="totalBookingsCount">0</h3>
+                                <p>Jami bronlar</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stats-card">
+                                <i class="fas fa-dollar-sign"></i>
+                                <h3 id="totalSpentAmount">$0</h3>
+                                <p>Jami sarflangan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Mening bronlarim</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tur</th>
+                                        <th>Sana</th>
+                                        <th>Narxi</th>
+                                        <th>Holati</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userBookingsList">
+                                    <!-- Bronlar ro'yxati -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                    <button type="button" class="btn btn-primary" id="editProfileBtn">Profilni tahrirlash</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chat Modal -->
+    <div class="modal fade" id="liveChatModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-comments me-2"></i>Admin bilan jonli chat
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="live-chat-container">
+                        <div class="chat-header">
+                            Admin: TourVoyage Support
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Chat xabarlari -->
+                        </div>
+                        <div class="chat-input">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="chatInput"
+                                    placeholder="Xabaringizni yozing..." autocomplete="off">
+                                <button class="btn btn-primary" type="button" id="sendChatBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Modal -->
+    <div class="modal fade" id="aiChatModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-robot me-2"></i>TourVoyage AI Assistent
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="live-chat-container">
+                        <div class="chat-header">
+                            AI Assistant: TourVoyage
+                        </div>
+                        <div class="chat-messages" id="aiChatMessages">
+                            <!-- AI xabarlari -->
+                        </div>
+                        <div class="chat-input">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="aiChatInput"
+                                    placeholder="Savolingizni yozing..." autocomplete="off">
+                                <button class="btn btn-primary" type="button" id="sendAIChatBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>TourVoyage</h5>
+                    <p>Eng yaxshi tur paketlari va sayohat tajribalari.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Aloqa</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> Samarqand shahri, O'zbekiston</p>
+                    <p><i class="fas fa-phone"></i> +998 50 503 57 04</p>
+                    <p><i class="fas fa-envelope"></i> qudratovkomron2004@gmail.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Bizni kuzatib boring</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 TourVoyage. Barcha huquqlar himoyalangan.</p>
+                <p><a href="admin-login.html" class="text-light">Admin panel</a></p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- API Integration -->
+    <script src="./js/api.js"></script>
+    <script src="./js/main-new.js"></script>
+</body>
+
+</html>
