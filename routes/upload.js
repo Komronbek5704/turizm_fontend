@@ -7,7 +7,7 @@ const {
   uploadTourImage, 
   handleUploadError 
 } = require('../middleware/upload');
-const {
+let {
   uploadSingleImage,
   uploadMultipleImages,
   deleteUploadedImages,
